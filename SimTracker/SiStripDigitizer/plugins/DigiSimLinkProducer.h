@@ -37,6 +37,10 @@ public:
   
   virtual void produce(edm::Event& e, const edm::EventSetup& c);
   
+  virtual void beginJob();
+
+  virtual void endJob();
+ 
 private:
   typedef std::vector<std::string> vstring;
   typedef std::map<unsigned int, std::vector<std::pair<const PSimHit*, int> >,std::less<unsigned int> > simhit_map;
@@ -60,3 +64,4 @@ private:
 };
 
 #endif
+#modification
