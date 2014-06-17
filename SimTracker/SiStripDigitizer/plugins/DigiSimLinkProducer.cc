@@ -92,6 +92,14 @@ DigiSimLinkProducer::~DigiSimLinkProducer() {
   delete theDigiAlgo;
 }  
 
+void DigiSimLinkProducer::beginJob() {
+  std::cout<<"!!!! BEGIN JOB !!!!!"<<std::endl;
+}
+
+void DigiSimLinkProducer::endJob() {
+  std::cout<<"!!!!! END JOB !!!!"<<std::endl;
+}
+
 // Functions that gets called by framework every event
 void DigiSimLinkProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
