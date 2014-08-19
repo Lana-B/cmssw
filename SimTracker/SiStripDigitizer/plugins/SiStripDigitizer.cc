@@ -89,6 +89,7 @@ SiStripDigitizer::SiStripDigitizer(const edm::ParameterSet& conf, edm::one::EDPr
       "in the configuration file or remove the modules that require it.";
   }
   theDigiAlgo.reset(new SiStripDigitizerAlgorithm(conf));
+  std::cout<<"!!!!!!!!!!!!!!!!SiStripDigi.cc!!!!!!!!!"<<std::endl;
 }
 
 // Virtual destructor needed.

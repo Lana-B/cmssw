@@ -80,6 +80,7 @@ void DigiSimLinkAlgorithm::run(edm::DetSet<SiStripDigi>& outdigi,
 			       edm::ESHandle<SiStripBadStrip> & deadChannelHandle,
 			       const TrackerTopology *tTopo,
                                CLHEP::HepRandomEngine* engine) {
+  std::cout<<"!!!!!!x"<<std::endl;
   theDigiSimLinkPileUpSignals->reset();
   unsigned int detID = det->geographicalId().rawId();
   SiStripNoises::Range detNoiseRange = noiseHandle->getRange(detID);
@@ -97,7 +98,6 @@ void DigiSimLinkAlgorithm::run(edm::DetSet<SiStripDigi>& outdigi,
   	fs=deadChannelHandle->decode(*it);
     for(int strip = fs.firstStrip; strip <fs.firstStrip+fs.range; ++strip )badChannels[strip] = true;
   }
-
      
   // local amplitude of detector channels (from processed PSimHit)
 //  locAmpl.clear();
@@ -313,7 +313,7 @@ void DigiSimLinkAlgorithm::push_link(const DigitalVecType &digis,
     
     //--- include the noise as well
     double totalAmplitude1 = afterNoise[(*mi).first];
-    
+    std::cout<<"!!!!!!y"<<std::endl;
     //--- digisimlink
     int sim_counter=0;
     for (std::map<const PSimHit *, Amplitude>::const_iterator iter = totalAmplitudePerSimHit.begin(); 

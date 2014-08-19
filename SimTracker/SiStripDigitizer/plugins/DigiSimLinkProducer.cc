@@ -3,6 +3,7 @@
 
 // system include files
 #include <memory>
+#include <fstream>
 
 #include "DigiSimLinkProducer.h"
 
@@ -84,7 +85,7 @@ DigiSimLinkProducer::DigiSimLinkProducer(const edm::ParameterSet& conf) :
   
   zeroSuppression = conf_.getParameter<bool>("ZeroSuppression");
   theDigiAlgo = new DigiSimLinkAlgorithm(conf_);
-
+  std::cout<<"!!!!!!z"<<std::endl;
 }
 
 // Virtual destructor needed.
@@ -94,6 +95,10 @@ DigiSimLinkProducer::~DigiSimLinkProducer() {
 
 void DigiSimLinkProducer::beginJob() {
   std::cout<<"!!!! BEGIN JOB !!!!!"<<std::endl;
+  ofstream myfile;
+  myfile.open ("example.txt");
+  myfile << "Writing this to a file.\n";
+  myfile.close();
 }
 
 void DigiSimLinkProducer::endJob() {
@@ -105,7 +110,7 @@ void DigiSimLinkProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
 {
   edm::Service<edm::RandomNumberGenerator> rng;
   CLHEP::HepRandomEngine* engine = &rng->getEngine(iEvent.streamID());
-
+  std::cout<<"!!!!!! DIGISIMLINKPRODUCER CODE !!!!!!!!!"<<std::endl;
   // Step A: Get Inputs
   edm::ESHandle < ParticleDataTable > pdt;
   iSetup.getData( pdt );
@@ -207,9 +212,10 @@ void DigiSimLinkProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
       }
     }
   }
-
+  std::cout<<"!!!!!!xyz"<<std::endl;
   // Step C: create output collection
   std::auto_ptr<edm::DetSetVector<StripDigiSimLink> > outputlink(new edm::DetSetVector<StripDigiSimLink>(theDigiLinkVector));
   // Step D: write output to file
   iEvent.put(outputlink);
+
 }

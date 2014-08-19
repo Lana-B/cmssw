@@ -71,7 +71,6 @@ void
 SiStripDigitizerAlgorithm::initializeDetUnit(StripGeomDetUnit* det, const edm::EventSetup& iSetup) {
   edm::ESHandle<SiStripBadStrip> deadChannelHandle;
   iSetup.get<SiStripBadChannelRcd>().get(deadChannelHandle);
-
   unsigned int detId = det->geographicalId().rawId();
   int numStrips = (det->specificTopology()).nstrips();  
 
@@ -93,7 +92,6 @@ SiStripDigitizerAlgorithm::initializeEvent(const edm::EventSetup& iSetup) {
   theSiPileUpSignals->reset();
   // This should be clear by after all calls to digitize(), but I might as well make sure
   associationInfoForDetId_.clear();
-
   //get gain noise pedestal lorentzAngle from ES handle
   edm::ESHandle<ParticleDataTable> pdt;
   iSetup.getData(pdt);
