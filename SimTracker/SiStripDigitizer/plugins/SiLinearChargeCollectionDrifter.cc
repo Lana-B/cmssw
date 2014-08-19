@@ -11,6 +11,23 @@ SiLinearChargeCollectionDrifter::SiLinearChargeCollectionDrifter(double dc,
   depletionVoltage(dv),
   appliedVoltage(av)
 {
+  //------------------------------------------------------------------------------------------------//
+  StripVars = new TFile("StripVars.root", "RECREATE"); // create new TFile to hold the new variables
+  EventVars = new TTree("EventVars","EventVars");
+  EventVars->Branch("driftTime",&driftTime, "driftTime/D"); //Branch for drift time
+  EventVars->Branch("sigmaCS",&sigmaCS, "sigmaCS/D"); //Branch for sigma/charge spread
+  EventVars->Branch("modThick",&modThick, "modThick/D"); //Branch for module thickness
+  //------------------------------------------------------------------------------------------------//
+}
+
+SiLinearChargeCollectionDrifter::~SiLinearChargeCollectionDrifter(){
+  //----------------------------------------// Write tree in StripVars file
+  EventVars->Print();
+  StripVars->cd();
+  EventVars->Write("",TObject::kOverwrite);
+  delete StripVars;
+  delete EventVars;
+  //----------------------------------------//
 }
 
 SiChargeCollectionDrifter::collection_type SiLinearChargeCollectionDrifter::drift(const SiChargeCollectionDrifter::ionization_type& ion, 
@@ -35,11 +52,17 @@ SignalPoint SiLinearChargeCollectionDrifter::drift
   thicknessFraction = thicknessFraction<1. ? thicknessFraction : 1. ;
   
   // computes the drift time in the sensor
-  double driftTime = -timeNormalisation*
+  driftTime = -timeNormalisation*
     vdt::fast_log(1.-2*depletionVoltage*thicknessFraction/
 	(depletionVoltage+appliedVoltage))
     +chargeDistributionRMS;  
   
+  //---------------------------------------------------------------------------------//
+  sigmaCS = sqrt(2.*diffusionConstant*driftTime);  //calculate the sigma/charge spread
+  modThick = moduleThickness; //define module thickness in tree var
+  EventVars->Fill();  
+  //---------------------------------------------------------------------------------//
+
   // returns the signal: an energy on the surface, with a size due to diffusion.
   return SignalPoint(edu.x() + depth*drift.x()/drift.z(),
                      edu.y() + depth*drift.y()/drift.z(),
